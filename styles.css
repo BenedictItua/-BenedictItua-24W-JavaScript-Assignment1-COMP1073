@@ -1,0 +1,28 @@
+@charset "utf-8";
+body {
+    background-color: white; /* Default background color */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+
+label {
+    font-weight: bold;
+}
+
+div {
+    padding-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 5px;
+    width: 150px;
+}
+/* Hide the output paragraph until the user has submitted the form */
+/* Show the output paragraph */
+p {
+    color: #ffffff;
+    padding: 10px;
+    visibility: visible; /* Set to visible */
+}
+
+

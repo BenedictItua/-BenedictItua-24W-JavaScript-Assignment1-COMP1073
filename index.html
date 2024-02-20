@@ -1,169 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lab 1 | COMP1073 Client-Side JavaScript</title>
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
 
-<head>
-	<meta charset="utf-8" />
-	<title>Assignment 1 | COMP1073 Client-Side JavaScript</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" href="styles.css">
-	
-</head>
+    <body>
+        <div>
+            <label for="customname">Enter custom name:</label>
+            <input id="customname" type="text" placeholder="" />
+        </div>
+        <div>
+            <label for="imperial">imperial</label>
+            <input
+                id="imperial"
+                type="radio"
+                name="units"
+                value="imperial"
+                checked
+            />
+            <label for="metric">metric</label>
+            <input id="metric" type="radio" name="units" value="metric" />
+        </div>
+        <div>
+            <button class="randomize">Generate random story</button>
+        </div>
+        <!-- This lab based on the excellent assessment challenge at https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Silly_story_generator -->
+        <p class="story"></p>
+        <script src="js/silly-story.js"></script>
 
-<body>
-	<h1>See-N-Say Storymaker</h1>
-	<p id="studentId"></p>
-	<section>
-		<!-- Section with all the buttons for the user to build their story -->
-		<h2>Create Your Story</h2>
-		<button id="noun1">Noun 1</button>
-		<p id="choosenNoun1"></p>
-		<button id="verb">Verb</button>
-		<p id="choosenVerb"></p>
-		<button id="adjective">Adjective</button>
-		<p id="choosenAdjective"></p>
-		<button id="noun2">Noun 2</button>
-		<p id="choosenNoun2"></p>
-		<button id="setting">Setting</button>
-		<p id="choosenSetting"></p>
-	</section>
-	<section>
-		<!-- Section with playback controls to see or hear the story -->
-		<h2>See Your Story</h2>
-		<button id="playback">Show Story</button>
-		<button id="random">Random Story</button>
-		<!-- Empty paragraph to display the story -->
-		<p id="story"></p>
-	</section>
-	
-	<script>
-		// Assignment 1 | COMP1073 Client-Side JavaScript
+        <script>
+            // VARIABLE DECLARATIONS
 
-/* Variables
--------------------------------------------------- */
-// Constants for main button query selectors
-const noun1Button = document.getElementById("noun1");
-const verbButton = document.getElementById("verb");
-const adjectiveButton = document.getElementById("adjective");
-const noun2Button = document.getElementById("noun2");
-const settingButton = document.getElementById("setting");
-// Constants for p tag to display query selectors
-const choosenNoun1 = document.getElementById("choosenNoun1");
-const choosenVerb = document.getElementById("choosenVerb");
-const choosenAdjective = document.getElementById("choosenAdjective");
-const choosenNoun2 = document.getElementById("choosenNoun2");
-const choosenSetting = document.getElementById("choosenSetting");
+/* STEP 1: Declare and initialize variables
+- customName for the name field
+- randomize for the button
+- story for the paragraph that outputs the final story
+*/
 
-// Constants for final buttons and p tags
-const playbackButton = document.getElementById("playback");
-const randomButton = document.getElementById("random");
-const storyParagraph = document.getElementById("story");
-const body = document.body;
-// Variables for pre-defined arrays
-const nouns1 = ["The Turkey", "Mom", "Dad", "The dog", "My teacher", "The Elephant", "The cat"];
-const verbs = ["Sat on", "ate", "danced with", "saw", "doesn't like", "kissed"];
-const adjectives = ["a funny", "a scary", "a goofy", "a slimy", "a barking", "a fat"];
-const nouns2 = ["goat", "monkey", "fish", "cow", "frog", "bug", "worm"];
-const places = ["on the moon", "on the chair", "in my spaghetti", "in my soup", "on the grass", "in my shoes"];
+var customName = document.getElementById('customname');
+var randomize = document.querySelector('.randomize');
+var story = document.querySelector('.story');
 
+/* STEP 3: Create the variable that contains the story string that will be modified 
+- use var storyText to containt the following:
+'It was 94 farenheit outside, so :insertx: went for a walk. When they got to :inserty:, they stared in horror for a few moments, then :insertz:. Bob saw the whole thing, but he was not surprised — :insertx: weighs 300 pounds, and it was a hot day.'
+*/
+var storyText = 'It was 94 fahrenheit outside, so :insertx: went for a walk. When they got to :inserty:, they stared in horror for a few moments, then :insertz:. Bob saw the whole thing, but he was not surprised — :insertx: weighs 300 pounds, and it was a hot day.';
 
-// Variables for count to grab array elements
-let noun1Count = 0;
-let verbCount = 0;
-let adjectiveCount = 0;
-let noun2Count = 0;
-let settingCount = 0;
+/* STEP 4: Create three arrays, insertX, insertY, and insertZ, assigning them the following array values respectively:
+Donald Trump, Jackie Chan, Santa Claus
+Area 51, Death Valley, Aruba
+spontaneously combusted, rapidly sublimated, evaporated instantly
+*/
+var insertX = ['Donald Trump', 'Jackie Chan', 'Santa Claus'];
+var insertY = ['Area 51, Death Valley, Aruba'];
+var insertZ = ['spontaneously combusted, rapidly sublimated, evaporated instantly']
 
-/* Functions
--------------------------------------------------- */
-    // variable to get array element and displaying it
-    function noun1_on_click() {
-        const randomIndex = Math.floor(Math.random() * nouns1.length);
-        choosenNoun1.textContent = nouns1[randomIndex];
+// FUNCTIONS
+
+/* STEP 2: have a look at the following function - if you call this function and pass it an array, it will return one of the elements of that array randomly */
+function randomValueFromArray(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+/* STEP 6: Review the partially complete result() function below */
+function result() {
+   
+    // STEP 7: Create a new variable called newStory and 
+    //set it to the value of storyText - we don't want to overwrite the original story!
+    var newStory = storyText;
+
+    /* STEP 8: Use the randomValueFromArray() function to generate a value for 
+    each of three new variables - xItem, yItem, and zItem
+	Call up the function and for each variable, pass it the array from 
+    which to grab a random string - for example if insertW was an array of strings, I would type:
+	var wItem = randomValueFromArray(insertW);*/
+    var xItem = randomValueFromArray(insertX);
+    var yItem = randomValueFromArray(insertY);
+    var zItem = randomValueFromArray(insertZ);
+    
+    //console.log(xItem);
+    /* STEP 9: Replace the three placeholders in the newStory 
+    string — :insertx:, :inserty:, and :insertz: — with the strings stored in 
+    xItem, yItem, and zItem. Each time, be sure to update the variable newStory 
+    (with =). You might need to do one of the above replacements twice! */
+    newStory = newStory.replace(':insertx:', xItem);
+    newStory = newStory.replace(':inserty:', yItem);
+    newStory = newStory.replace(':insertz:', zItem);
+
+    /* STEP 10: If the user has typed a name in the customName field, replace the name 'Bob' in the story with whatever they typed */
+    if (customName.value !== '') {
+        newStory = newStory.replace('Bob', customName.value);
     }
-    // if-else to change count setting
 
+    /* STEP 11: If the metric radio button has been checked, we need to convert the temperature and mass numbers in the story */
+    if (document.getElementById("metric").checked) {
+        // STEP 11a: Create a variable called weight and convert the 300lbs to kgs (1lb = 0.453592kg)
+        var weight = 300 * 0.453592;
 
-function verb_on_click() {
-    const randomIndex = Math.floor(Math.random() * verbs.length);
-    choosenVerb.textContent = verbs[randomIndex];
+        // STEP 11b: Replace the string 300 pounds with the updated weight in kg
+        newStory = newStory.replace('300 pounds', weight.toFixed(2) + ' kilograms');
+
+        // STEP 12a: Create a variable called temp and convert °F to °C ... the formula for conversion is °C = (°F - 32) x 5/9
+        var temp = (94 - 32) * 5/9;
+        // STEP 12b: Replace the string '94 fahrenheit' with the updated temperature in °C
+        newStory = newStory.replace('94 fahrenheit', temp.toFixed(2) + 'celsius');
+    }
+    /* STEP 13: Make the textContent property of the story variable (which references the paragraph) equal to newStory */
+    story.textContent = newStory;
+    // The following line makes the paragraph visible
+    story.style.visibility = "visible";
 }
 
-function adjective_on_click() {
-    const randomIndex = Math.floor(Math.random() * adjectives.length);
-    choosenAdjective.textContent = adjectives[randomIndex];
-}
-
-function noun2_on_click() {
-    const randomIndex = Math.floor(Math.random() * nouns2.length);
-    choosenNoun2.textContent = nouns2[randomIndex];
-}
-
-function setting_on_click() {
-    const randomIndex = Math.floor(Math.random() * places.length);
-    choosenSetting.textContent = places[randomIndex];
-}
-
-// concatenate the user story and display
-function playback_on_click() {
-    const story = `${choosenNoun1.textContent} ${choosenVerb.textContent} ${choosenAdjective.textContent} ${choosenNoun2.textContent} in ${choosenSetting.textContent}.`;
-    storyParagraph.textContent = story;
-}
-
-// grabbing random element from arrays, concatenate and display
-function random_on_click() {
-    noun1_on_click();
-    verb_on_click();
-    adjective_on_click();
-    noun2_on_click();
-    setting_on_click();
-    playback_on_click();
-}
-
-/* Event Listeners
--------------------------------------------------- */
-noun1Button.addEventListener("click", noun1_on_click);
-verbButton.addEventListener("click", verb_on_click);
-adjectiveButton.addEventListener("click", adjective_on_click);
-noun2Button.addEventListener("click", noun2_on_click);
-settingButton.addEventListener("click", setting_on_click);
-playbackButton.addEventListener("click", playback_on_click);
-randomButton.addEventListener("click", random_on_click);
-
-
-
-
-// Function to generate a random color in hexadecimal format
-function getRandomColor() {
-    // Generate random R, G, and B values
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    
-    // Convert RGB to hexadecimal format
-    const hexR = r.toString(16).padStart(2, '0'); // Ensure two digits
-    const hexG = g.toString(16).padStart(2, '0');
-    const hexB = b.toString(16).padStart(2, '0');
-    
-    // Return the hexadecimal color string
-    return `#${hexR}${hexG}${hexB}`;
-}
-
-// Change background color when a button is clicked
-const buttons = document.querySelectorAll("button");
-buttons.forEach(button => {
-    button.addEventListener("click", () => {
-        const randomColor = getRandomColor();
-        body.style.backgroundColor = randomColor;
-    });
-});
-
-
-// concatenate the user story and display
-function playback_on_click() {
-    const story = `${choosenNoun1.textContent} ${choosenVerb.textContent} ${choosenAdjective.textContent} ${choosenNoun2.textContent} ${choosenSetting.textContent}.`;
-    storyParagraph.textContent = story;
-}
-	</script>
-</body>
-
+// EVENT LISTENERS
+/* STEP 5: Add a click event listener to the randomize variable 
+so that when the button it represents is clicked, the result() function is run. */
+randomize.addEventListener("click", result);
+// This lab based on the excellent assessment challenge at https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Silly_story_generator
+        </script>
+    </body>
 </html>
